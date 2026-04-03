@@ -6,17 +6,15 @@
 #include <sensor_msgs/PointCloud2.h>
 #include <string>
 
-using namespace std;
-
 bool finish = false;
-string file_path;
+std::string file_path;
 
 void cloudCallback(const sensor_msgs::PointCloud2& msg) {
   pcl::PointCloud<pcl::PointXYZ> cloud;
   pcl::fromROSMsg(msg, cloud);
   pcl::io::savePCDFileASCII(file_path + std::string("tmp.pcd"), cloud);
 
-  cout << "map saved." << endl;
+  std::cout << "map saved." << std::endl;
   finish = true;
 }
 
@@ -31,13 +29,9 @@ int main(int argc, char** argv) {
 
   file_path = argv[1];
 
-  // ros::Subscriber cloud_sub = node.subscribe("/map_generator/global_cloud",
-  // 10, cloudCallback);
-  // ros::Subscriber cloud_sub =
-  // node.subscribe("/firefly/nbvPlanner/octomap_pcl", 10, cloudCallback);
-
   // Generate map by clicking
-  ros::Subscriber cloud_sub = node.subscribe("/map_generator/click_map", 10, cloudCallback);
+  ros::Subscriber cloud_sub = node.subscribe("/map_generator/global_cloud", 10, cloudCallback);
+  // ros::Subscriber cloud_sub = node.subscribe("/map_generator/click_map", 10, cloudCallback);
   ros::Duration(1.0).sleep();
 
   while (ros::ok()) {
@@ -46,7 +40,6 @@ int main(int argc, char** argv) {
     if (finish) break;
   }
 
-  // cout << "finish record map." << endl;
   ROS_WARN("[Map Recorder]: finish record map.");
   return 0;
 }

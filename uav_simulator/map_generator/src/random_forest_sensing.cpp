@@ -15,26 +15,24 @@
 #include <Eigen/Eigen>
 #include <random>
 
-using namespace std;
-
 // pcl::search::KdTree<pcl::PointXYZ> kdtreeLocalMap;
 pcl::KdTreeFLANN<pcl::PointXYZ> kdtreeLocalMap;
-vector<int> pointIdxRadiusSearch;
-vector<float> pointRadiusSquaredDistance;
+std::vector<int> pointIdxRadiusSearch;
+std::vector<float> pointRadiusSquaredDistance;
 
-random_device rd;
-default_random_engine eng;
-uniform_real_distribution<double> rand_x;
-uniform_real_distribution<double> rand_y;
-uniform_real_distribution<double> rand_w;
-uniform_real_distribution<double> rand_h;
+std::random_device rd;
+std::default_random_engine eng;
+std::uniform_real_distribution<double> rand_x;
+std::uniform_real_distribution<double> rand_y;
+std::uniform_real_distribution<double> rand_w;
+std::uniform_real_distribution<double> rand_h;
 
 ros::Publisher _local_map_pub;
 ros::Publisher _all_map_pub;
 ros::Publisher click_map_pub_;
 ros::Subscriber _odom_sub;
 
-vector<double> _state;
+std::vector<double> _state;
 
 int _obs_num;
 double _x_size, _y_size, _z_size;
@@ -47,10 +45,10 @@ bool _has_odom = false;
 int circle_num_;
 double radius_l_, radius_h_, z_l_, z_h_;
 double theta_;
-uniform_real_distribution<double> rand_radius_;
-uniform_real_distribution<double> rand_radius2_;
-uniform_real_distribution<double> rand_theta_;
-uniform_real_distribution<double> rand_z_;
+std::uniform_real_distribution<double> rand_radius_;
+std::uniform_real_distribution<double> rand_radius2_;
+std::uniform_real_distribution<double> rand_theta_;
+std::uniform_real_distribution<double> rand_z_;
 
 sensor_msgs::PointCloud2 globalMap_pcd;
 pcl::PointCloud<pcl::PointXYZ> cloudMap;
@@ -62,15 +60,15 @@ void RandomMapGenerate()
 {
   pcl::PointXYZ pt_random;
 
-  rand_x = uniform_real_distribution<double>(_x_l, _x_h);
-  rand_y = uniform_real_distribution<double>(_y_l, _y_h);
-  rand_w = uniform_real_distribution<double>(_w_l, _w_h);
-  rand_h = uniform_real_distribution<double>(_h_l, _h_h);
+  rand_x = std::uniform_real_distribution<double>(_x_l, _x_h);
+  rand_y = std::uniform_real_distribution<double>(_y_l, _y_h);
+  rand_w = std::uniform_real_distribution<double>(_w_l, _w_h);
+  rand_h = std::uniform_real_distribution<double>(_h_l, _h_h);
 
-  rand_radius_ = uniform_real_distribution<double>(radius_l_, radius_h_);
-  rand_radius2_ = uniform_real_distribution<double>(radius_l_, 1.2);
-  rand_theta_ = uniform_real_distribution<double>(-theta_, theta_);
-  rand_z_ = uniform_real_distribution<double>(z_l_, z_h_);
+  rand_radius_ = std::uniform_real_distribution<double>(radius_l_, radius_h_);
+  rand_radius2_ = std::uniform_real_distribution<double>(radius_l_, 1.2);
+  rand_theta_ = std::uniform_real_distribution<double>(-theta_, theta_);
+  rand_z_ = std::uniform_real_distribution<double>(z_l_, z_h_);
 
   // generate polar obs
   for (int i = 0; i < _obs_num; i++)
@@ -323,7 +321,7 @@ int main(int argc, char** argv)
   _y_l = -_y_size / 2.0;
   _y_h = +_y_size / 2.0;
 
-  _obs_num = min(_obs_num, (int)_x_size * 10);
+  _obs_num = std::min(_obs_num, (int)_x_size * 10);
   _z_limit = _z_size;
 
   ros::Duration(0.5).sleep();
@@ -337,7 +335,7 @@ int main(int argc, char** argv)
   }
   std::cout << "map seed: " << seed << std::endl;
 
-  eng = default_random_engine(seed);
+  eng = std::default_random_engine(seed);
 
   RandomMapGenerate();
 

@@ -2,6 +2,7 @@
 #include <exploration_manager/fast_exploration_fsm.h>
 
 #include <plan_manage/backward.hpp>
+
 namespace backward {
 backward::SignalHandling sh;
 }
